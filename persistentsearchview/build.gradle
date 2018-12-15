@@ -6,8 +6,8 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 7
-        versionName '1.0.4'
+        versionCode 8
+        versionName '1.0.5'
     }
     buildTypes {
         release {
@@ -42,7 +42,7 @@ ext {
     siteUrl = 'https://github.com/crysehillmes/PersistentSearchView'
     gitUrl = 'https://github.com/crysehillmes/PersistentSearchView.git'
 
-    libraryVersion = '1.0.4'
+    libraryVersion = '1.0.5'
 
     developerId = 'tyk5555'
     developerName = 'Cryse Hillmes'
