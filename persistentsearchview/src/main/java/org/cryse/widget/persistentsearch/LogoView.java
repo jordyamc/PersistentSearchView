@@ -1,18 +1,18 @@
 package org.cryse.widget.persistentsearch;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.support.annotation.DrawableRes;
-import android.support.v4.content.res.ResourcesCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
-public class LogoView extends TextView {
+import androidx.annotation.DrawableRes;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.res.ResourcesCompat;
+
+public class LogoView extends AppCompatTextView {
     private Drawable mLogoDrawable;
+
     public LogoView(Context context) {
         super(context);
     }
@@ -25,13 +25,7 @@ public class LogoView extends TextView {
         super(context, attrs, defStyleAttr);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public LogoView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
-
-    public void setLogo(String logoText)
-    {
+    public void setLogo(String logoText) {
         setLogo(new TextDrawable(getResources(), logoText));
     }
 
@@ -41,16 +35,16 @@ public class LogoView extends TextView {
 
     public void setLogo(Drawable drawable) {
         this.mLogoDrawable = drawable;
-        mLogoDrawable.setBounds(0,0, mLogoDrawable.getIntrinsicWidth(), mLogoDrawable.getIntrinsicHeight());
+        mLogoDrawable.setBounds(0, 0, mLogoDrawable.getIntrinsicWidth(), mLogoDrawable.getIntrinsicHeight());
         this.invalidate();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if(!TextUtils.isEmpty(getText()))
+        if (!TextUtils.isEmpty(getText()))
             super.onDraw(canvas);
         else {
-            if(mLogoDrawable != null) {
+            if (mLogoDrawable != null) {
                 mLogoDrawable.draw(canvas);
             }
         }

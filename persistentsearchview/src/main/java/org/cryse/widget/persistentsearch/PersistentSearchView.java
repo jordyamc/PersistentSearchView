@@ -10,9 +10,9 @@ import android.inputmethodservice.KeyboardView;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.CardView;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.ViewCompat;
+import androidx.cardview.widget.CardView;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.TextUtils;
@@ -227,12 +227,12 @@ public class PersistentSearchView extends RevealViewGroup {
     }
 
     private void bindViews() {
-        this.mSearchCardView = (CardView) findViewById(R.id.cardview_search);
-        this.mHomeButton = (HomeButton) findViewById(R.id.button_home);
-        this.mLogoView = (LogoView) findViewById(R.id.logoview);
-        this.mSearchEditText = (EditText) findViewById(R.id.edittext_search);
-        this.mSuggestionListView = (ListView) findViewById(R.id.listview_suggestions);
-        this.mMicButton = (ImageView) findViewById(R.id.button_mic);
+        this.mSearchCardView = findViewById(R.id.cardview_search);
+        this.mHomeButton = findViewById(R.id.button_home);
+        this.mLogoView = findViewById(R.id.logoview);
+        this.mSearchEditText = findViewById(R.id.edittext_search);
+        this.mSuggestionListView = findViewById(R.id.listview_suggestions);
+        this.mMicButton = findViewById(R.id.button_mic);
     }
 
     private void setValuesToViews() {
@@ -339,19 +339,19 @@ public class PersistentSearchView extends RevealViewGroup {
 
     }
 
+    public EditText getSearchEditText() {
+        return mSearchEditText;
+    }
+
     private void setUpLayoutTransition() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            RelativeLayout searchRoot = (RelativeLayout) findViewById(R.id.search_root);
-            LayoutTransition layoutTransition = new LayoutTransition();
-            layoutTransition.setDuration(DURATION_LAYOUT_TRANSITION);
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
-                // layoutTransition.enableTransitionType(LayoutTransition.CHANGING);
-                layoutTransition.enableTransitionType(LayoutTransition.CHANGE_DISAPPEARING);
-                layoutTransition.setStartDelay(LayoutTransition.CHANGING, 0);
-            }
-            layoutTransition.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
-            mSearchCardView.setLayoutTransition(layoutTransition);
-        }
+        RelativeLayout searchRoot = (RelativeLayout) findViewById(R.id.search_root);
+        LayoutTransition layoutTransition = new LayoutTransition();
+        layoutTransition.setDuration(DURATION_LAYOUT_TRANSITION);
+        // layoutTransition.enableTransitionType(LayoutTransition.CHANGING);
+        layoutTransition.enableTransitionType(LayoutTransition.CHANGE_DISAPPEARING);
+        layoutTransition.setStartDelay(LayoutTransition.CHANGING, 0);
+        layoutTransition.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
+        mSearchCardView.setLayoutTransition(layoutTransition);
     }
 
     @Override
@@ -643,9 +643,9 @@ public class PersistentSearchView extends RevealViewGroup {
             desireRevealWidth = metrics.widthPixels;
         }
         if(x <= 0 )
-            x = desireRevealWidth - mCardHeight / 2;
+            x = desireRevealWidth - mCardHeight / 2f;
         if(y <= 0)
-            y = mCardHeight / 2;
+            y = mCardHeight / 2f;
 
         int measuredHeight = getMeasuredWidth();
         int finalRadius = (int) Math.max(Math.max(measuredHeight, px), desireRevealWidth);
@@ -836,11 +836,7 @@ public class PersistentSearchView extends RevealViewGroup {
                 getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
                     public void onGlobalLayout() {
-                        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                            getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                        } else {
-                            getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        }
+                        getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         revealFromMenuItem();
                     }
                 });
@@ -910,7 +906,7 @@ public class PersistentSearchView extends RevealViewGroup {
             fromEditingToNormal();
         } else {
             setCurrentState(SearchViewState.SEARCH);
-            if((!getSearchText().equals(mLogoView.getText()) || forceSearch) && !avoidSearch) {
+            if((!getSearchText().equals(mLogoView.getText().toString()) || forceSearch) && !avoidSearch) {
                 search();
             }
             closeSearchInternal();

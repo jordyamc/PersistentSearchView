@@ -1,13 +1,14 @@
 package org.cryse.widget.persistentsearch;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.speech.RecognizerIntent;
 
 import java.util.List;
+
+import androidx.fragment.app.Fragment;
 
 public class DefaultVoiceRecognizerDelegate extends VoiceRecognitionDelegate {
 
@@ -19,19 +20,11 @@ public class DefaultVoiceRecognizerDelegate extends VoiceRecognitionDelegate {
         super(activity, activityRequestCode);
     }
 
-    public DefaultVoiceRecognizerDelegate(Fragment fragment) {
-        super(fragment);
-    }
-
-    public DefaultVoiceRecognizerDelegate(Fragment fragment, int activityRequestCode) {
-        super(fragment, activityRequestCode);
-    }
-
-    public DefaultVoiceRecognizerDelegate(android.support.v4.app.Fragment supportFragment) {
+    public DefaultVoiceRecognizerDelegate(Fragment supportFragment) {
         super(supportFragment);
     }
 
-    public DefaultVoiceRecognizerDelegate(android.support.v4.app.Fragment supportFragment, int activityRequestCode) {
+    public DefaultVoiceRecognizerDelegate(Fragment supportFragment, int activityRequestCode) {
         super(supportFragment, activityRequestCode);
     }
 

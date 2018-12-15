@@ -8,7 +8,7 @@ import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.os.Build;
-import android.support.v7.graphics.drawable.SupportDrawerArrowDrawable;
+import androidx.appcompat.graphics.drawable.SupportDrawerArrowDrawable;
 import android.util.AttributeSet;
 import android.util.Property;
 import android.widget.ImageView;
