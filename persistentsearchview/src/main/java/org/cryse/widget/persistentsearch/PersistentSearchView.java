@@ -261,7 +261,7 @@ public class PersistentSearchView extends RevealViewGroup {
                 if (mCurrentState == SearchViewState.EDITING) {
                     cancelEditing();
                 } else if (mCurrentState == SearchViewState.SEARCH) {
-                    fromSearchToNormal();
+                    fromSearchToNormal(false);
                 } else {
                     if (mHomeButtonListener != null)
                         mHomeButtonListener.onHomeButtonClick();
@@ -273,7 +273,7 @@ public class PersistentSearchView extends RevealViewGroup {
 
             @Override
             public void onClick(View v) {
-                dispatchStateChange(SearchViewState.EDITING); // This would call when state is wrong.
+                dispatchStateChange(SearchViewState.EDITING,false); // This would call when state is wrong.
             }
 
         });
@@ -543,7 +543,7 @@ public class PersistentSearchView extends RevealViewGroup {
     public void populateEditText(String query) {
         String text = query.trim();
         setSearchString(text, true);
-        dispatchStateChange(SearchViewState.SEARCH);
+        dispatchStateChange(SearchViewState.SEARCH,false);
     }
 
     /***
@@ -857,7 +857,7 @@ public class PersistentSearchView extends RevealViewGroup {
         mHomeButton.animateState(mHomeButtonSearchIconState);
     }
 
-    private void fromSearchToNormal() {
+    private void fromSearchToNormal(boolean fromUser) {
         setLogoTextInt("");
         setSearchString("", true);
         setCurrentState(SearchViewState.NORMAL);
@@ -867,7 +867,7 @@ public class PersistentSearchView extends RevealViewGroup {
             hideCircularlyToMenuItem();
         }
         setLogoTextInt("");
-        if (mSearchListener != null)
+        if (mSearchListener != null && fromUser)
             mSearchListener.onSearchExit();
         mHomeButton.animateState(mHomeButtonCloseIconState);
     }
@@ -878,7 +878,7 @@ public class PersistentSearchView extends RevealViewGroup {
         mHomeButton.animateState(mHomeButtonOpenIconState);
     }
 
-    private void fromEditingToNormal() {
+    private void fromEditingToNormal(boolean fromUser) {
         setCurrentState(SearchViewState.NORMAL);
         if(mDisplayMode == DisplayMode.TOOLBAR) {
             setSearchString("", false);
@@ -888,7 +888,7 @@ public class PersistentSearchView extends RevealViewGroup {
             hideCircularlyToMenuItem();
         }
         setLogoTextInt("");
-        if (mSearchListener != null)
+        if (mSearchListener != null && !fromUser)
             mSearchListener.onSearchExit();
         mHomeButton.animateState(mHomeButtonCloseIconState);
     }
@@ -903,7 +903,7 @@ public class PersistentSearchView extends RevealViewGroup {
 
     private void fromEditingToSearch(boolean forceSearch, boolean avoidSearch) {
         if(TextUtils.isEmpty(getSearchText())) {
-            fromEditingToNormal();
+            fromEditingToNormal(false);
         } else {
             setCurrentState(SearchViewState.SEARCH);
             if((!getSearchText().equals(mLogoView.getText().toString()) || forceSearch) && !avoidSearch) {
@@ -914,12 +914,12 @@ public class PersistentSearchView extends RevealViewGroup {
         }
     }
 
-    private void dispatchStateChange(SearchViewState targetState) {
+    private void dispatchStateChange(SearchViewState targetState,boolean fromUser) {
         if(targetState == SearchViewState.NORMAL) {
             if (mCurrentState == SearchViewState.EDITING) {
-                fromEditingToNormal();
+                fromEditingToNormal(fromUser);
             } else if(mCurrentState == SearchViewState.SEARCH) {
-                fromSearchToNormal();
+                fromSearchToNormal(fromUser);
             }
         } else if(targetState == SearchViewState.EDITING) {
             if (mCurrentState == SearchViewState.NORMAL) {
@@ -942,7 +942,7 @@ public class PersistentSearchView extends RevealViewGroup {
     }
 
     public void openSearch() {
-        dispatchStateChange(SearchViewState.EDITING);
+        dispatchStateChange(SearchViewState.EDITING,true);
     }
 
     public void setStartPositionFromMenuItem(View menuItemView) {
@@ -964,16 +964,16 @@ public class PersistentSearchView extends RevealViewGroup {
 
     public void openSearch(String query) {
         setSearchString(query, true);
-        dispatchStateChange(SearchViewState.SEARCH);
+        dispatchStateChange(SearchViewState.SEARCH,true);
     }
 
     public void closeSearch() {
-        dispatchStateChange(SearchViewState.NORMAL);
+        dispatchStateChange(SearchViewState.NORMAL,true);
     }
 
     public void cancelEditing() {
         if(TextUtils.isEmpty(mLogoView.getText())) {
-            fromEditingToNormal();
+            fromEditingToNormal(false);
         } else {
             fromEditingToSearch(true);
         }
@@ -1097,7 +1097,7 @@ public class PersistentSearchView extends RevealViewGroup {
         for (int i = 0; i < getChildCount(); i++) {
             getChildAt(i).restoreHierarchyState(ss.childrenStates);
         }
-        dispatchStateChange(ss.getCurrentSearchViewState());
+        dispatchStateChange(ss.getCurrentSearchViewState(),false);
         this.mAvoidTriggerTextWatcher = false;
     }
 
