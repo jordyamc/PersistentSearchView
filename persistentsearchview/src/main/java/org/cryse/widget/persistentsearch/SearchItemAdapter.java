@@ -30,10 +30,9 @@ public class SearchItemAdapter extends ArrayAdapter<SearchItem> {
         } else {
             border.setVisibility(View.GONE);
         }
-        final TextView title = (TextView) convertView
-                .findViewById(R.id.textview_title);
+        final TextView title = convertView.findViewById(R.id.textview_title);
         title.setText(searchItem.getTitle());
-        ImageView icon = (ImageView) convertView.findViewById(R.id.imageview_icon);
+        ImageView icon = convertView.findViewById(R.id.imageview_icon);
         if(searchItem.getIcon() == null) {
             switch (searchItem.getType()) {
                 case SearchItem.TYPE_SEARCH_ITEM_HISTORY:
