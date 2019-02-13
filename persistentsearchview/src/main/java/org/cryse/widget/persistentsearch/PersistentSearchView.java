@@ -434,42 +434,46 @@ public class PersistentSearchView extends RevealViewGroup {
      */
     private void hideCircularly(int x, int y) {
 
-        Resources r = getResources();
-        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96,
-                r.getDisplayMetrics());
-        int finalRadius = (int) Math.max(this.getMeasuredWidth() * 1.5, px);
+        try {
+            Resources r = getResources();
+            float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96,
+                    r.getDisplayMetrics());
+            int finalRadius = (int) Math.max(this.getMeasuredWidth() * 1.5, px);
 
-        SupportAnimator animator = ViewAnimationUtils.createCircularReveal(
-                mSearchCardView, x, y, 0, finalRadius);
-        animator = animator.reverse();
-        animator.setInterpolator(new AccelerateDecelerateInterpolator());
-        animator.setDuration(DURATION_REVEAL_CLOSE);
-        animator.start();
-        animator.addListener(new SupportAnimator.AnimatorListener() {
+            SupportAnimator animator = ViewAnimationUtils.createCircularReveal(
+                    mSearchCardView, x, y, 0, finalRadius);
+            animator = animator.reverse();
+            animator.setInterpolator(new AccelerateDecelerateInterpolator());
+            animator.setDuration(DURATION_REVEAL_CLOSE);
+            animator.start();
+            animator.addListener(new SupportAnimator.AnimatorListener() {
 
-            @Override
-            public void onAnimationStart() {
+                @Override
+                public void onAnimationStart() {
 
-            }
+                }
 
-            @Override
-            public void onAnimationEnd() {
-                setVisibility(View.GONE);
-                closeSearchInternal();
-                // closeSearch();
-            }
+                @Override
+                public void onAnimationEnd() {
+                    setVisibility(View.GONE);
+                    closeSearchInternal();
+                    // closeSearch();
+                }
 
-            @Override
-            public void onAnimationCancel() {
+                @Override
+                public void onAnimationCancel() {
 
-            }
+                }
 
-            @Override
-            public void onAnimationRepeat() {
+                @Override
+                public void onAnimationRepeat() {
 
-            }
+                }
 
-        });
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void hideCircularly() {
@@ -633,52 +637,56 @@ public class PersistentSearchView extends RevealViewGroup {
     }
 
     private void revealFrom(float x, float y, int desireRevealWidth) {
-        Resources r = getResources();
-        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96,
-                r.getDisplayMetrics());
-        if(desireRevealWidth <= 0)
-            desireRevealWidth = getMeasuredWidth();
-        if(desireRevealWidth <= 0) {
-            DisplayMetrics metrics = getResources().getDisplayMetrics();
-            desireRevealWidth = metrics.widthPixels;
+        try {
+            Resources r = getResources();
+            float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96,
+                    r.getDisplayMetrics());
+            if(desireRevealWidth <= 0)
+                desireRevealWidth = getMeasuredWidth();
+            if(desireRevealWidth <= 0) {
+                DisplayMetrics metrics = getResources().getDisplayMetrics();
+                desireRevealWidth = metrics.widthPixels;
+            }
+            if(x <= 0 )
+                x = desireRevealWidth - mCardHeight / 2f;
+            if(y <= 0)
+                y = mCardHeight / 2f;
+
+            int measuredHeight = getMeasuredWidth();
+            int finalRadius = (int) Math.max(Math.max(measuredHeight, px), desireRevealWidth);
+
+            SupportAnimator animator = ViewAnimationUtils.createCircularReveal(
+                    mSearchCardView, (int) x, (int) y, 0, finalRadius);
+            animator.setInterpolator(new AccelerateDecelerateInterpolator());
+            animator.setDuration(DURATION_REVEAL_OPEN);
+            animator.addListener(new SupportAnimator.AnimatorListener() {
+
+                @Override
+                public void onAnimationCancel() {
+
+                }
+
+                @Override
+                public void onAnimationEnd() {
+                    // show search view here
+                    openSearchInternal(true);
+                }
+
+                @Override
+                public void onAnimationRepeat() {
+
+                }
+
+                @Override
+                public void onAnimationStart() {
+
+                }
+
+            });
+            animator.start();
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        if(x <= 0 )
-            x = desireRevealWidth - mCardHeight / 2f;
-        if(y <= 0)
-            y = mCardHeight / 2f;
-
-        int measuredHeight = getMeasuredWidth();
-        int finalRadius = (int) Math.max(Math.max(measuredHeight, px), desireRevealWidth);
-
-        SupportAnimator animator = ViewAnimationUtils.createCircularReveal(
-                mSearchCardView, (int) x, (int) y, 0, finalRadius);
-        animator.setInterpolator(new AccelerateDecelerateInterpolator());
-        animator.setDuration(DURATION_REVEAL_OPEN);
-        animator.addListener(new SupportAnimator.AnimatorListener() {
-
-            @Override
-            public void onAnimationCancel() {
-
-            }
-
-            @Override
-            public void onAnimationEnd() {
-                // show search view here
-                openSearchInternal(true);
-            }
-
-            @Override
-            public void onAnimationRepeat() {
-
-            }
-
-            @Override
-            public void onAnimationStart() {
-
-            }
-
-        });
-        animator.start();
     }
 
     private void search() {
