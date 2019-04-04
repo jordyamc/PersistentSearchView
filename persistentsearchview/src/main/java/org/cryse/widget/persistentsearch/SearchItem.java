@@ -2,6 +2,10 @@ package org.cryse.widget.persistentsearch;
 
 import android.graphics.drawable.Drawable;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 public class SearchItem {
     private String mTitle;
     private String mValue;
@@ -72,5 +76,12 @@ public class SearchItem {
 
     public void setType(int type) {
         this.mType = type;
+    }
+
+    public static List<String> getTitles(Collection<SearchItem> items) {
+        List<String> titles = new ArrayList<>();
+        for (SearchItem item : items)
+            titles.add(item.mTitle.toLowerCase());
+        return titles;
     }
 }
