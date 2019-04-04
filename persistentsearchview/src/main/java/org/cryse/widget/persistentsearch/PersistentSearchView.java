@@ -619,23 +619,19 @@ public class PersistentSearchView extends RevealViewGroup {
 
     private void buildEmptySearchSuggestions() {
         if (mSuggestionBuilder != null) {
-            mSearchSuggestions.clear();
             Collection<SearchItem> suggestions = mSuggestionBuilder.buildEmptySearchSuggestion(10);
             if (suggestions != null && suggestions.size() > 0) {
-                mSearchSuggestions.addAll(suggestions);
+                mSearchItemAdapter.updateData(suggestions);
             }
-            mSearchItemAdapter.notifyDataSetChanged();
         }
     }
 
     private void buildSearchSuggestions(String query) {
         if (mSuggestionBuilder != null) {
-            mSearchSuggestions.clear();
             Collection<SearchItem> suggestions = mSuggestionBuilder.buildSearchSuggestion(10, query);
-            if (suggestions != null && suggestions.size() > 0) {
-                mSearchSuggestions.addAll(suggestions);
+            if (suggestions != null) {
+                mSearchItemAdapter.updateData(suggestions);
             }
-            mSearchItemAdapter.notifyDataSetChanged();
         }
     }
 

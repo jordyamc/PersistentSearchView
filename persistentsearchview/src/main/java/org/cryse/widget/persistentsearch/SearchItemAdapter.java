@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +25,14 @@ public class SearchItemAdapter extends ArrayAdapter<SearchItem> {
         super(context, 0, options);
         this.items = options;
         this.options = new ArrayList<>(options);
+    }
+
+    public void updateData(Collection<SearchItem> items){
+        clear();
+        options.clear();
+        addAll(items);
+        options.addAll(items);
+        notifyDataSetChanged();
     }
 
     @Override
