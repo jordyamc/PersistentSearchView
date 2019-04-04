@@ -317,10 +317,10 @@ public class PersistentSearchView extends RevealViewGroup {
                 if (!mAvoidTriggerTextWatcher) {
                     if (s.length() > 0) {
                         showClearButton();
-                        buildSearchSuggestions(getSearchText());
+                        //buildSearchSuggestions(getSearchText());
                     } else {
                         showMicButton();
-                        buildEmptySearchSuggestions();
+                        //buildEmptySearchSuggestions();
                     }
                 }
                 if (mSearchListener != null)
@@ -618,21 +618,21 @@ public class PersistentSearchView extends RevealViewGroup {
     }
 
     private void buildEmptySearchSuggestions() {
-        if (mSuggestionBuilder != null) {
+        /*if (mSuggestionBuilder != null) {
             Collection<SearchItem> suggestions = mSuggestionBuilder.buildEmptySearchSuggestion(10);
             if (suggestions != null && suggestions.size() > 0) {
                 mSearchItemAdapter.updateData(suggestions);
             }
-        }
+        }*/
     }
 
     private void buildSearchSuggestions(String query) {
-        if (mSuggestionBuilder != null) {
+        /*if (mSuggestionBuilder != null) {
             Collection<SearchItem> suggestions = mSuggestionBuilder.buildSearchSuggestion(10, query);
             if (suggestions != null) {
                 mSearchItemAdapter.updateData(suggestions);
             }
-        }
+        }*/
     }
 
     private void revealFrom(float x, float y, int desireRevealWidth) {
@@ -829,6 +829,7 @@ public class PersistentSearchView extends RevealViewGroup {
 
     public void setSuggestionBuilder(SearchSuggestionsBuilder suggestionBuilder) {
         this.mSuggestionBuilder = suggestionBuilder;
+        mSearchItemAdapter.updateData(suggestionBuilder.buildSearchSuggestion(10,":"));
     }
 
     private void fromNormalToEditing() {
