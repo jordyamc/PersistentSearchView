@@ -27,7 +27,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -67,7 +66,6 @@ public class PersistentSearchView extends RevealViewGroup {
     private CardView mSearchCardView;
     private HomeButton mHomeButton;
     private AppCompatAutoCompleteTextView mSearchEditText;
-    private ListView mSuggestionListView;
     private ImageView mMicButton;
     private SearchListener mSearchListener;
     private HomeButtonListener mHomeButtonListener;
@@ -229,7 +227,6 @@ public class PersistentSearchView extends RevealViewGroup {
         this.mHomeButton = findViewById(R.id.button_home);
         this.mLogoView = findViewById(R.id.logoview);
         this.mSearchEditText = findViewById(R.id.edittext_search);
-        this.mSuggestionListView = findViewById(R.id.listview_suggestions);
         this.mMicButton = findViewById(R.id.button_mic);
     }
 
@@ -486,7 +483,6 @@ public class PersistentSearchView extends RevealViewGroup {
      */
     public void hideSuggestions() {
         this.mSearchEditText.setVisibility(View.GONE);
-        this.mSuggestionListView.setVisibility(View.GONE);
     }
 
     private boolean isMicEnabled() {
@@ -695,7 +691,6 @@ public class PersistentSearchView extends RevealViewGroup {
         this.mLogoView.setVisibility(View.GONE);
         this.mSearchEditText.setVisibility(View.VISIBLE);
         mSearchEditText.requestFocus();
-        this.mSuggestionListView.setVisibility(View.VISIBLE);
         mSearchEditText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -737,7 +732,6 @@ public class PersistentSearchView extends RevealViewGroup {
         this.mLogoView.setVisibility(View.VISIBLE);
         this.mSearchEditText.setVisibility(View.GONE);
         // if(mDisplayMode == DISPLAY_MODE_AS_TOOLBAR) {
-        mSuggestionListView.setVisibility(View.GONE);
         // }
         // this.mSuggestionListView.setVisibility(View.GONE);
         /*if (mTintView != null && mRootLayout != null) {
