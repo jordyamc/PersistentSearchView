@@ -1,7 +1,6 @@
 package org.cryse.widget.persistentsearch;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,10 +89,6 @@ public class SearchItemAdapter extends ArrayAdapter<SearchItem> {
         return new SearchFilter(options, new SearchFilter.ResultsCallback() {
             @Override
             public void onResult(ArrayList<SearchItem> items) {
-                for (SearchItem item :
-                        items) {
-                    Log.e("Suggestion",item.getTitle());
-                }
                 clear();
                 addAll(items);
                 notifyDataSetChanged();

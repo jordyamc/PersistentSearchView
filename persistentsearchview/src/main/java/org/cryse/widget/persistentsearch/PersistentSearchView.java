@@ -10,17 +10,14 @@ import android.inputmethodservice.KeyboardView;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.Editable;
-import android.text.Layout;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -728,50 +725,11 @@ public class PersistentSearchView extends RevealViewGroup {
             showClearButton();
         }
         if (openKeyboard) {
-            if (showCustomKeyboard && mCustomKeyboardView != null) { // Show custom keyboard
-                mCustomKeyboardView.setVisibility(View.VISIBLE);
-                mCustomKeyboardView.setEnabled(true);
-
-                // Enable cursor, but still prevent default keyboard from showing up
-                OnTouchListener otl = new OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        switch (event.getAction()) {
-                            case MotionEvent.ACTION_DOWN:
-                                mCustomKeyboardView.setVisibility(View.VISIBLE);
-                                mCustomKeyboardView.setEnabled(true);
-                                Layout layout = ((EditText) v).getLayout();
-                                float x = event.getX() + mSearchEditText.getScrollX();
-                                int offset = layout.getOffsetForHorizontal(0, x);
-                                if (offset > 0)
-                                    if (x > layout.getLineMax(0))
-                                        mSearchEditText.setSelection(offset);     // Touch was at the end of the text
-                                    else
-                                        mSearchEditText.setSelection(offset - 1);
-                                break;
-                            case MotionEvent.ACTION_MOVE:
-                                layout = ((EditText) v).getLayout();
-                                x = event.getX() + mSearchEditText.getScrollX();
-                                offset = layout.getOffsetForHorizontal(0, x);
-                                if (offset > 0)
-                                    if (x > layout.getLineMax(0))
-                                        mSearchEditText.setSelection(offset);     // Touch point was at the end of the text
-                                    else
-                                        mSearchEditText.setSelection(offset - 1);
-                                break;
-                        }
-                        return true;
-                    }
-                };
-                mSearchEditText.setOnTouchListener(otl);
-            } else { // Show default keyboard
-                mSearchEditText.setOnTouchListener(null);
-                InputMethodManager inputMethodManager = (InputMethodManager) getContext()
-                        .getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.toggleSoftInputFromWindow(
-                        getApplicationWindowToken(),
-                        InputMethodManager.SHOW_FORCED, 0);
-            }
+            InputMethodManager inputMethodManager = (InputMethodManager) getContext()
+                    .getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.toggleSoftInputFromWindow(
+                    getApplicationWindowToken(),
+                    InputMethodManager.SHOW_FORCED, 0);
         }
     }
 
@@ -793,12 +751,7 @@ public class PersistentSearchView extends RevealViewGroup {
     }
 
     private void hideKeyboard() {
-        if (showCustomKeyboard && mCustomKeyboardView != null) {
-            mCustomKeyboardView.setVisibility(View.GONE);
-            mCustomKeyboardView.setEnabled(false);
-        } else {
-            ((InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getApplicationWindowToken(), 0);
-        }
+        ((InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getApplicationWindowToken(), 0);
     }
 
     public boolean isEditing() {
@@ -823,8 +776,6 @@ public class PersistentSearchView extends RevealViewGroup {
 
     public void setSuggestionBuilder(SearchSuggestionsBuilder suggestionBuilder) {
         this.mSuggestionBuilder = suggestionBuilder;
-        for (SearchItem item : suggestionBuilder.buildSearchSuggestion(10, ":"))
-            Log.e("Suggestions init", item.getTitle());
         mSearchEditText.setAdapter(new SearchItemAdapter(getContext(), new ArrayList<>(suggestionBuilder.buildSearchSuggestion(10, ":"))));
     }
 
