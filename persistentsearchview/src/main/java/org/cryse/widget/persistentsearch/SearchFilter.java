@@ -16,7 +16,7 @@ public class SearchFilter extends Filter {
 
     @Override
     protected FilterResults performFiltering(CharSequence constraint) {
-        if (constraint != null && constraint.toString().trim().equals("")) {
+        if (constraint != null && !constraint.toString().trim().equals("")) {
             ArrayList<SearchItem> list = new ArrayList<>();
             for (SearchItem item : allItems)
                 if (item.getValue().toLowerCase().contains(constraint.toString().toLowerCase()))
