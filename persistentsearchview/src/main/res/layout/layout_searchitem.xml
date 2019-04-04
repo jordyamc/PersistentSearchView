@@ -6,10 +6,7 @@
     android:layout_height="48dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
-    android:background="?selectableItemBackground"
-    android:clickable="true"
-    android:focusable="true"
-    android:orientation="horizontal">
+    android:background="?selectableItemBackground">
 
     <ImageView
         android:id="@+id/imageview_icon"
@@ -28,6 +25,7 @@
         android:id="@+id/view_border"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:background="#000"
         android:backgroundTint="?android:textColorSecondary"/>
 
     <TextView
