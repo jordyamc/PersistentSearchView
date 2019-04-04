@@ -1,6 +1,7 @@
 package org.cryse.widget.persistentsearch;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +13,17 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class SearchItemAdapter extends ArrayAdapter<SearchItem> {
 
+    private ArrayList<SearchItem> items;
     private ArrayList<SearchItem> options;
 
     public SearchItemAdapter(Context context, ArrayList<SearchItem> options) {
-        super(context, 0, new ArrayList<SearchItem>());
-        this.options = options;
+        super(context, 0, options);
+        this.items = options;
+        this.options = new ArrayList<>(options);
     }
 
     @Override
@@ -55,15 +59,34 @@ public class SearchItemAdapter extends ArrayAdapter<SearchItem> {
         return convertView;
     }
 
+    @Override
+    public int getCount() {
+        return items.size();
+    }
+
+    @Nullable
+    @Override
+    public SearchItem getItem(int position) {
+        return items.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
     @NonNull
     @Override
     public Filter getFilter() {
         return new SearchFilter(options, new SearchFilter.ResultsCallback() {
             @Override
             public void onResult(ArrayList<SearchItem> items) {
+                for (SearchItem item :
+                        items) {
+                    Log.e("Suggestion",item.getTitle());
+                }
                 clear();
-                for (SearchItem item:items)
-                    add(item);
+                addAll(items);
                 notifyDataSetChanged();
             }
         });

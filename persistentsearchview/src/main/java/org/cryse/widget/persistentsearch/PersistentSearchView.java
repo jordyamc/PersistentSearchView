@@ -706,12 +706,12 @@ public class PersistentSearchView extends RevealViewGroup {
         this.mSearchEditText.setVisibility(View.VISIBLE);
         mSearchEditText.requestFocus();
         this.mSuggestionListView.setVisibility(View.VISIBLE);
-        mSuggestionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mSearchEditText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 hideKeyboard();
-                SearchItem result = mSearchSuggestions.get(arg2);
+                SearchItem result = (SearchItem) arg0.getItemAtPosition(arg2);
                 if (mSearchListener != null) {
                     if (mSearchListener.onSuggestion(result)) {
                         setSearchString(result.getValue(), true);
