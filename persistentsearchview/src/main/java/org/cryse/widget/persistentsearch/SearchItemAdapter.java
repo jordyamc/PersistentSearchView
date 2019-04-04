@@ -5,15 +5,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
+
 public class SearchItemAdapter extends ArrayAdapter<SearchItem> {
 
+    private ArrayList<SearchItem> options;
+
     public SearchItemAdapter(Context context, ArrayList<SearchItem> options) {
-        super(context, 0, options);
+        super(context, 0, new ArrayList<SearchItem>());
+        this.options = options;
     }
 
     @Override
@@ -47,5 +53,19 @@ public class SearchItemAdapter extends ArrayAdapter<SearchItem> {
             icon.setImageDrawable(searchItem.getIcon());
         }
         return convertView;
+    }
+
+    @NonNull
+    @Override
+    public Filter getFilter() {
+        return new SearchFilter(options, new SearchFilter.ResultsCallback() {
+            @Override
+            public void onResult(ArrayList<SearchItem> items) {
+                clear();
+                for (SearchItem item:items)
+                    add(item);
+                notifyDataSetChanged();
+            }
+        });
     }
 }
