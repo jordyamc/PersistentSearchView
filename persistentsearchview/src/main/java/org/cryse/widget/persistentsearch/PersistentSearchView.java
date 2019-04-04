@@ -7,20 +7,15 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.inputmethodservice.KeyboardView;
-import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.core.view.ViewCompat;
-import androidx.cardview.widget.CardView;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -40,8 +35,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.ViewCompat;
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
 
@@ -49,7 +47,7 @@ import io.codetail.animation.ViewAnimationUtils;
 public class PersistentSearchView extends RevealViewGroup {
     public static final int VOICE_RECOGNITION_CODE = 8185102;
     final static double COS_45 = Math.cos(Math.toRadians(45));
-    private static final int[] RES_IDS_ACTION_BAR_SIZE = { R.attr.actionBarSize };
+    private static final int[] RES_IDS_ACTION_BAR_SIZE = {R.attr.actionBarSize};
     private static final int DURATION_REVEAL_OPEN = 400;
     private static final int DURATION_REVEAL_CLOSE = 300;
     private static final int DURATION_HOME_BUTTON = 300;
@@ -97,6 +95,7 @@ public class PersistentSearchView extends RevealViewGroup {
         super(context);
         init(null);
     }
+
     public PersistentSearchView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(attrs);
@@ -105,16 +104,6 @@ public class PersistentSearchView extends RevealViewGroup {
     public PersistentSearchView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(attrs);
-    }
-
-    public void setCustomKeyboardView(KeyboardView customKeyboardView)
-    {
-        mCustomKeyboardView = customKeyboardView;
-    }
-
-    public void enableCustomKeyboardView(boolean enable)
-    {
-        showCustomKeyboard = enable;
     }
 
     static float calculateVerticalPadding(CardView cardView) {
@@ -140,7 +129,9 @@ public class PersistentSearchView extends RevealViewGroup {
         }
     }
 
-    /** Calculates the Toolbar height in pixels. */
+    /**
+     * Calculates the Toolbar height in pixels.
+     */
     static int calculateToolbarSize(Context context) {
         if (context == null) {
             return 0;
@@ -158,7 +149,15 @@ public class PersistentSearchView extends RevealViewGroup {
 
         float size = att.getDimension(0, 0);
         att.recycle();
-        return (int)size;
+        return (int) size;
+    }
+
+    public void setCustomKeyboardView(KeyboardView customKeyboardView) {
+        mCustomKeyboardView = customKeyboardView;
+    }
+
+    public void enableCustomKeyboardView(boolean enable) {
+        showCustomKeyboard = enable;
     }
 
     private void init(AttributeSet attrs) {
@@ -192,14 +191,14 @@ public class PersistentSearchView extends RevealViewGroup {
             case MENUITEM:
             default:
                 mCardHorizontalPadding = getResources().getDimensionPixelSize(R.dimen.search_card_visible_padding_menu_item_mode);
-                if(mCardVerticalPadding > mCardHorizontalPadding)
+                if (mCardVerticalPadding > mCardHorizontalPadding)
                     mCardHorizontalPadding = mCardVerticalPadding;
                 mHomeButtonCloseIconState = HomeButton.IconState.ARROW;
                 mHomeButtonOpenIconState = HomeButton.IconState.ARROW;
                 setCurrentState(SearchViewState.NORMAL);
                 break;
             case TOOLBAR:
-                if(mHomeButtonMode == 0) { // Arrow Mode
+                if (mHomeButtonMode == 0) { // Arrow Mode
                     mHomeButtonCloseIconState = HomeButton.IconState.ARROW;
                     mHomeButtonOpenIconState = HomeButton.IconState.ARROW;
                 } else { // Burger Mode
@@ -249,9 +248,7 @@ public class PersistentSearchView extends RevealViewGroup {
         this.mSearchEditText.setThreshold(1);
         if (mLogoDrawable != null) {
             this.mLogoView.setLogo(mLogoDrawable);
-        }
-        else if (mStringLogoDrawable != null)
-        {
+        } else if (mStringLogoDrawable != null) {
             this.mLogoView.setLogo(mStringLogoDrawable);
         }
         this.mLogoView.setTextColor(mSearchTextColor);
@@ -276,7 +273,7 @@ public class PersistentSearchView extends RevealViewGroup {
 
             @Override
             public void onClick(View v) {
-                dispatchStateChange(SearchViewState.EDITING,false); // This would call when state is wrong.
+                dispatchStateChange(SearchViewState.EDITING, false); // This would call when state is wrong.
             }
 
         });
@@ -386,7 +383,7 @@ public class PersistentSearchView extends RevealViewGroup {
                 }
             }
         }
-        if(totalHeight < mCustomToolbarHeight)
+        if (totalHeight < mCustomToolbarHeight)
             totalHeight = mCustomToolbarHeight;
         setMeasuredDimension(widthSize, totalHeight);
     }
@@ -474,7 +471,7 @@ public class PersistentSearchView extends RevealViewGroup {
                 }
 
             });
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -550,7 +547,7 @@ public class PersistentSearchView extends RevealViewGroup {
     public void populateEditText(String query) {
         String text = query.trim();
         setSearchString(text, true);
-        dispatchStateChange(SearchViewState.SEARCH,false);
+        dispatchStateChange(SearchViewState.SEARCH, false);
     }
 
     /***
@@ -640,15 +637,15 @@ public class PersistentSearchView extends RevealViewGroup {
             Resources r = getResources();
             float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96,
                     r.getDisplayMetrics());
-            if(desireRevealWidth <= 0)
+            if (desireRevealWidth <= 0)
                 desireRevealWidth = getMeasuredWidth();
-            if(desireRevealWidth <= 0) {
+            if (desireRevealWidth <= 0) {
                 DisplayMetrics metrics = getResources().getDisplayMetrics();
                 desireRevealWidth = metrics.widthPixels;
             }
-            if(x <= 0 )
+            if (x <= 0)
                 x = desireRevealWidth - mCardHeight / 2f;
-            if(y <= 0)
+            if (y <= 0)
                 y = mCardHeight / 2f;
 
             int measuredHeight = getMeasuredWidth();
@@ -683,7 +680,7 @@ public class PersistentSearchView extends RevealViewGroup {
 
             });
             animator.start();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -733,7 +730,7 @@ public class PersistentSearchView extends RevealViewGroup {
             showClearButton();
         }
         if (openKeyboard) {
-            if(showCustomKeyboard && mCustomKeyboardView != null) { // Show custom keyboard
+            if (showCustomKeyboard && mCustomKeyboardView != null) { // Show custom keyboard
                 mCustomKeyboardView.setVisibility(View.VISIBLE);
                 mCustomKeyboardView.setEnabled(true);
 
@@ -798,11 +795,10 @@ public class PersistentSearchView extends RevealViewGroup {
     }
 
     private void hideKeyboard() {
-        if(showCustomKeyboard && mCustomKeyboardView != null) {
+        if (showCustomKeyboard && mCustomKeyboardView != null) {
             mCustomKeyboardView.setVisibility(View.GONE);
             mCustomKeyboardView.setEnabled(false);
-        }
-        else {
+        } else {
             ((InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getApplicationWindowToken(), 0);
         }
     }
@@ -829,16 +825,18 @@ public class PersistentSearchView extends RevealViewGroup {
 
     public void setSuggestionBuilder(SearchSuggestionsBuilder suggestionBuilder) {
         this.mSuggestionBuilder = suggestionBuilder;
+        for (SearchItem item : suggestionBuilder.buildSearchSuggestion(10, ":"))
+            Log.e("Suggestions init", item.getTitle());
         mSearchEditText.setAdapter(new SearchItemAdapter(getContext(), new ArrayList<>(suggestionBuilder.buildSearchSuggestion(10, ":"))));
     }
 
     private void fromNormalToEditing() {
-        if(mDisplayMode == DisplayMode.TOOLBAR) {
+        if (mDisplayMode == DisplayMode.TOOLBAR) {
             setCurrentState(SearchViewState.EDITING);
             openSearchInternal(true);
-        } else if(mDisplayMode == DisplayMode.MENUITEM) {
+        } else if (mDisplayMode == DisplayMode.MENUITEM) {
             setCurrentState(SearchViewState.EDITING);
-            if(ViewCompat.isAttachedToWindow(this))
+            if (ViewCompat.isAttachedToWindow(this))
                 revealFromMenuItem();
             else {
                 getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -855,10 +853,10 @@ public class PersistentSearchView extends RevealViewGroup {
     }
 
     private void fromNormalToSearch() {
-        if(mDisplayMode == DisplayMode.TOOLBAR) {
+        if (mDisplayMode == DisplayMode.TOOLBAR) {
             setCurrentState(SearchViewState.SEARCH);
             search();
-        } else if(mDisplayMode == DisplayMode.MENUITEM) {
+        } else if (mDisplayMode == DisplayMode.MENUITEM) {
             setVisibility(VISIBLE);
             fromEditingToSearch();
         }
@@ -869,9 +867,9 @@ public class PersistentSearchView extends RevealViewGroup {
         setLogoTextInt("");
         setSearchString("", true);
         setCurrentState(SearchViewState.NORMAL);
-        if(mDisplayMode == DisplayMode.TOOLBAR) {
+        if (mDisplayMode == DisplayMode.TOOLBAR) {
             closeSearchInternal();
-        } else if(mDisplayMode == DisplayMode.MENUITEM) {
+        } else if (mDisplayMode == DisplayMode.MENUITEM) {
             hideCircularlyToMenuItem();
         }
         setLogoTextInt("");
@@ -888,10 +886,10 @@ public class PersistentSearchView extends RevealViewGroup {
 
     private void fromEditingToNormal(boolean fromUser) {
         setCurrentState(SearchViewState.NORMAL);
-        if(mDisplayMode == DisplayMode.TOOLBAR) {
+        if (mDisplayMode == DisplayMode.TOOLBAR) {
             setSearchString("", false);
             closeSearchInternal();
-        } else if(mDisplayMode == DisplayMode.MENUITEM) {
+        } else if (mDisplayMode == DisplayMode.MENUITEM) {
             setSearchString("", false);
             hideCircularlyToMenuItem();
         }
@@ -910,11 +908,11 @@ public class PersistentSearchView extends RevealViewGroup {
     }
 
     private void fromEditingToSearch(boolean forceSearch, boolean avoidSearch) {
-        if(TextUtils.isEmpty(getSearchText())) {
+        if (TextUtils.isEmpty(getSearchText())) {
             fromEditingToNormal(false);
         } else {
             setCurrentState(SearchViewState.SEARCH);
-            if((!getSearchText().equals(mLogoView.getText().toString()) || forceSearch) && !avoidSearch) {
+            if ((!getSearchText().equals(mLogoView.getText().toString()) || forceSearch) && !avoidSearch) {
                 search();
             }
             closeSearchInternal();
@@ -922,23 +920,23 @@ public class PersistentSearchView extends RevealViewGroup {
         }
     }
 
-    private void dispatchStateChange(SearchViewState targetState,boolean fromUser) {
-        if(targetState == SearchViewState.NORMAL) {
+    private void dispatchStateChange(SearchViewState targetState, boolean fromUser) {
+        if (targetState == SearchViewState.NORMAL) {
             if (mCurrentState == SearchViewState.EDITING) {
                 fromEditingToNormal(fromUser);
-            } else if(mCurrentState == SearchViewState.SEARCH) {
+            } else if (mCurrentState == SearchViewState.SEARCH) {
                 fromSearchToNormal(fromUser);
             }
-        } else if(targetState == SearchViewState.EDITING) {
+        } else if (targetState == SearchViewState.EDITING) {
             if (mCurrentState == SearchViewState.NORMAL) {
                 fromNormalToEditing();
-            } else if(mCurrentState == SearchViewState.SEARCH) {
+            } else if (mCurrentState == SearchViewState.SEARCH) {
                 fromSearchToEditing();
             }
-        } else if(targetState == SearchViewState.SEARCH) {
+        } else if (targetState == SearchViewState.SEARCH) {
             if (mCurrentState == SearchViewState.NORMAL) {
                 fromNormalToSearch();
-            } else if(mCurrentState == SearchViewState.EDITING) {
+            } else if (mCurrentState == SearchViewState.EDITING) {
                 fromEditingToSearch();
             }
         }
@@ -950,7 +948,7 @@ public class PersistentSearchView extends RevealViewGroup {
     }
 
     public void openSearch() {
-        dispatchStateChange(SearchViewState.EDITING,true);
+        dispatchStateChange(SearchViewState.EDITING, true);
     }
 
     public void setStartPositionFromMenuItem(View menuItemView) {
@@ -972,15 +970,15 @@ public class PersistentSearchView extends RevealViewGroup {
 
     public void openSearch(String query) {
         setSearchString(query, true);
-        dispatchStateChange(SearchViewState.SEARCH,true);
+        dispatchStateChange(SearchViewState.SEARCH, true);
     }
 
     public void closeSearch() {
-        dispatchStateChange(SearchViewState.NORMAL,true);
+        dispatchStateChange(SearchViewState.NORMAL, true);
     }
 
     public void cancelEditing() {
-        if(TextUtils.isEmpty(mLogoView.getText())) {
+        if (TextUtils.isEmpty(mLogoView.getText())) {
             fromEditingToNormal(false);
         } else {
             fromEditingToSearch(true);
@@ -990,6 +988,43 @@ public class PersistentSearchView extends RevealViewGroup {
     public void setVoiceRecognitionDelegate(VoiceRecognitionDelegate delegate) {
         this.mVoiceRecognitionDelegate = delegate;
         micStateChanged();
+    }
+
+    @Override
+    public Parcelable onSaveInstanceState() {
+        Parcelable superState = super.onSaveInstanceState();
+        SavedState ss = new SavedState(superState, mCurrentState);
+        ss.childrenStates = new SparseArray();
+        for (int i = 0; i < getChildCount(); i++) {
+            getChildAt(i).saveHierarchyState(ss.childrenStates);
+        }
+        return ss;
+    }
+
+    @Override
+    public void onRestoreInstanceState(Parcelable state) {
+        if (!(state instanceof SavedState)) {
+            super.onRestoreInstanceState(state);
+            return;
+        }
+        this.mAvoidTriggerTextWatcher = true;
+        SavedState ss = (SavedState) state;
+        super.onRestoreInstanceState(ss.getSuperState());
+        for (int i = 0; i < getChildCount(); i++) {
+            getChildAt(i).restoreHierarchyState(ss.childrenStates);
+        }
+        dispatchStateChange(ss.getCurrentSearchViewState(), false);
+        this.mAvoidTriggerTextWatcher = false;
+    }
+
+    @Override
+    protected void dispatchSaveInstanceState(SparseArray<Parcelable> container) {
+        dispatchFreezeSelfOnly(container);
+    }
+
+    @Override
+    protected void dispatchRestoreInstanceState(SparseArray<Parcelable> container) {
+        dispatchThawSelfOnly(container);
     }
 
     public enum DisplayMode {
@@ -1015,9 +1050,11 @@ public class PersistentSearchView extends RevealViewGroup {
     public enum SearchViewState {
         NORMAL(0), EDITING(1), SEARCH(2);
         int state;
+
         SearchViewState(int state) {
             this.state = state;
         }
+
         public static SearchViewState fromInt(int state) {
             for (SearchViewState enumState : values()) {
                 if (enumState.state == state) return enumState;
@@ -1082,44 +1119,23 @@ public class PersistentSearchView extends RevealViewGroup {
         void onHomeButtonClick();
     }
 
-    @Override
-    public Parcelable onSaveInstanceState() {
-        Parcelable superState = super.onSaveInstanceState();
-        SavedState ss = new SavedState(superState, mCurrentState);
-        ss.childrenStates = new SparseArray();
-        for (int i = 0; i < getChildCount(); i++) {
-            getChildAt(i).saveHierarchyState(ss.childrenStates);
-        }
-        return ss;
-    }
-
-    @Override
-    public void onRestoreInstanceState(Parcelable state) {
-        if(!(state instanceof SavedState)) {
-            super.onRestoreInstanceState(state);
-            return;
-        }
-        this.mAvoidTriggerTextWatcher = true;
-        SavedState ss = (SavedState) state;
-        super.onRestoreInstanceState(ss.getSuperState());
-        for (int i = 0; i < getChildCount(); i++) {
-            getChildAt(i).restoreHierarchyState(ss.childrenStates);
-        }
-        dispatchStateChange(ss.getCurrentSearchViewState(),false);
-        this.mAvoidTriggerTextWatcher = false;
-    }
-
-    @Override
-    protected void dispatchSaveInstanceState(SparseArray<Parcelable> container) {
-        dispatchFreezeSelfOnly(container);
-    }
-
-    @Override
-    protected void dispatchRestoreInstanceState(SparseArray<Parcelable> container) {
-        dispatchThawSelfOnly(container);
-    }
-
     static class SavedState extends BaseSavedState {
+        public static final ClassLoaderCreator<SavedState> CREATOR
+                = new ClassLoaderCreator<SavedState>() {
+            @Override
+            public SavedState createFromParcel(Parcel source, ClassLoader loader) {
+                return new SavedState(source, loader);
+            }
+
+            @Override
+            public SavedState createFromParcel(Parcel source) {
+                return createFromParcel(null);
+            }
+
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
         SparseArray childrenStates;
         private SearchViewState mCurrentSearchViewState;
 
@@ -1144,22 +1160,5 @@ public class PersistentSearchView extends RevealViewGroup {
         public SearchViewState getCurrentSearchViewState() {
             return mCurrentSearchViewState;
         }
-
-        public static final ClassLoaderCreator<SavedState> CREATOR
-                = new ClassLoaderCreator<SavedState>() {
-            @Override
-            public SavedState createFromParcel(Parcel source, ClassLoader loader) {
-                return new SavedState(source, loader);
-            }
-
-            @Override
-            public SavedState createFromParcel(Parcel source) {
-                return createFromParcel(null);
-            }
-
-            public SavedState[] newArray(int size) {
-                return new SavedState[size];
-            }
-        };
     }
 }
