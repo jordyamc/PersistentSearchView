@@ -10,6 +10,8 @@ import android.inputmethodservice.KeyboardView;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.ViewCompat;
 import androidx.cardview.widget.CardView;
@@ -69,7 +71,7 @@ public class PersistentSearchView extends RevealViewGroup {
     private LogoView mLogoView;
     private CardView mSearchCardView;
     private HomeButton mHomeButton;
-    private EditText mSearchEditText;
+    private AppCompatAutoCompleteTextView mSearchEditText;
     private ListView mSuggestionListView;
     private ImageView mMicButton;
     private SearchListener mSearchListener;
@@ -216,7 +218,7 @@ public class PersistentSearchView extends RevealViewGroup {
         this.mIsMic = true;
         mSearchSuggestions = new ArrayList<>();
         mSearchItemAdapter = new SearchItemAdapter(getContext(), mSearchSuggestions);
-        mSuggestionListView.setAdapter(mSearchItemAdapter);
+        mSearchEditText.setAdapter(mSearchItemAdapter);
 
         setUpLayoutTransition();
         setUpListeners();
@@ -244,6 +246,7 @@ public class PersistentSearchView extends RevealViewGroup {
         this.mSearchEditText.setTextColor(mSearchEditTextColor);
         this.mSearchEditText.setHint(mSearchEditTextHint);
         this.mSearchEditText.setHintTextColor(mSearchEditTextHintColor);
+        this.mSearchEditText.setThreshold(1);
         if (mLogoDrawable != null) {
             this.mLogoView.setLogo(mLogoDrawable);
         }
@@ -344,7 +347,7 @@ public class PersistentSearchView extends RevealViewGroup {
     }
 
     private void setUpLayoutTransition() {
-        RelativeLayout searchRoot = (RelativeLayout) findViewById(R.id.search_root);
+        RelativeLayout searchRoot = findViewById(R.id.search_root);
         LayoutTransition layoutTransition = new LayoutTransition();
         layoutTransition.setDuration(DURATION_LAYOUT_TRANSITION);
         // layoutTransition.enableTransitionType(LayoutTransition.CHANGING);

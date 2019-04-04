@@ -47,7 +47,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#212121" />
 
-            <EditText
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                 android:id="@+id/edittext_search"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -68,7 +68,7 @@
                 android:visibility="gone">
 
                 <requestFocus />
-            </EditText>
+            </androidx.appcompat.widget.AppCompatAutoCompleteTextView>
 
             <ImageView
                 android:id="@+id/button_mic"
