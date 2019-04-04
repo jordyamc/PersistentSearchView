@@ -218,7 +218,7 @@ public class PersistentSearchView extends RevealViewGroup {
         this.mIsMic = true;
         mSearchSuggestions = new ArrayList<>();
         mSearchItemAdapter = new SearchItemAdapter(getContext(), mSearchSuggestions);
-        mSearchEditText.setAdapter(mSearchItemAdapter);
+        //mSearchEditText.setAdapter(mSearchItemAdapter);
 
         setUpLayoutTransition();
         setUpListeners();
@@ -829,7 +829,7 @@ public class PersistentSearchView extends RevealViewGroup {
 
     public void setSuggestionBuilder(SearchSuggestionsBuilder suggestionBuilder) {
         this.mSuggestionBuilder = suggestionBuilder;
-        mSearchItemAdapter.updateData(suggestionBuilder.buildSearchSuggestion(10,":"));
+        mSearchEditText.setAdapter(new SearchItemAdapter(getContext(), new ArrayList<>(suggestionBuilder.buildSearchSuggestion(10, ":"))));
     }
 
     private void fromNormalToEditing() {
