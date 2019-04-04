@@ -28,7 +28,7 @@
         android:id="@+id/view_border"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?android:textColorSecondary"/>
+        android:backgroundTint="?android:textColorSecondary"/>
 
     <TextView
         android:id="@+id/textview_title"
