@@ -255,7 +255,7 @@ public class PersistentSearchView extends RevealViewGroup {
                 if (mCurrentState == SearchViewState.EDITING) {
                     cancelEditing();
                 } else if (mCurrentState == SearchViewState.SEARCH) {
-                    fromSearchToNormal(false);
+                    fromSearchToNormal(true);
                 } else {
                     if (mHomeButtonListener != null)
                         mHomeButtonListener.onHomeButtonClick();
